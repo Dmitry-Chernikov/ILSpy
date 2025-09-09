@@ -128,7 +128,8 @@
 
   <Target Name="SortResX" BeforeTargets="BeforeBuild" Inputs="@(SortResXInput)" Outputs="@(SortResXStamp)" Condition="'$(GITHUB_ACTIONS)' != 'true'">
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-      <SortResX>powershell -NoProfile -ExecutionPolicy Bypass -File BuildTools/sort-resx.ps1</SortResX>
+      <SortResX Condition=" '$(OS)' == 'Windows_NT' ">powershell -NoProfile -ExecutionPolicy Bypass -File BuildTools/sort-resx.ps1</SortResX>
+      <SortResX Condition=" '$(OS)' != 'Windows_NT' ">pwsh -NoProfile -ExecutionPolicy Bypass -File BuildTools/sort-resx.ps1</SortResX>
     </PropertyGroup>
     <Exec WorkingDirectory=".." Command="$(SortResX)" Timeout="60000" />
     <Touch Files="@(SortResXStamp)" AlwaysCreate="true" />
